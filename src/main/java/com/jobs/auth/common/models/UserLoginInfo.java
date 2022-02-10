@@ -1,6 +1,10 @@
 package com.jobs.auth.common.models;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,14 +14,19 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 @Entity
-@Data
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "tbl_user_login_info")
 public class UserLoginInfo extends AbstractModel {
 
-    private static  final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +49,23 @@ public class UserLoginInfo extends AbstractModel {
 
     @Column(name = "token")
     private String token;
+
+    @Column(name = "created")
+    public Long created;
+
+    @Column(name = "updated")
+    public Long updated;
+
+    @PrePersist
+    public void prePersist() {
+        created = System.currentTimeMillis();
+        updated = System.currentTimeMillis();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updated = System.currentTimeMillis();
+    }
 
 
 
